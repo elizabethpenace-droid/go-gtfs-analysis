@@ -1,0 +1,107 @@
+# GTFS Data Analysis – Metrolinx Bus Operations
+
+## Project Overview
+This project analyzes GTFS data from Metrolinx bus operations to extract operational
+insights related to trip volumes, stop activity, and trip durations. The analysis was
+developed as part of a Python data analysis technical assessment.
+
+The objective is to demonstrate data manipulation, validation, and analytical skills
+using real-world transit data while following best practices in code structure and
+version control.
+
+## Data Source
+The data used in this project comes from the official GTFS files provided by
+:contentReference[oaicite:0]{index=0} through the GO Transit
+Software Developers portal.
+
+Files used include:
+- trips.txt
+- stop_times.txt
+- stops.txt
+- routes.txt
+
+## Project Structure
+.
+├── GO-GTFS.ipynb
+├── README.md
+
+
+**Library**
+pandas: data manipulation
+matplotlib: data visualization
+Google Colab: execution environment
+
+
+**Analysis**
+
+1. Load Data
+Mount Google Drive
+Automatically load all .txt GTFS files into pandas DataFrames
+Store DataFrames in a dictionary for flexible access
+
+
+2. For each GTFS table:
+Count total rows and columns
+Identify missing (null) values: missing values were not relevant for this analysis
+Detect duplicate records: there was not duplicate rows, so it was not necesary delete information
+Generate: A summary quality report and detailed breakdown of null values by column
+
+3. Trip Analysis:
+Trips per route for a given service day: it was considered an specific date, and there is a total of 40 routes for 20260402.
+The top 3 routes: across all dates are 01260426-41	(Hamilton, 11854 trips), 01260426-40	(Hamilton, 9712 trips) and 01260426-21	(Milton, 9144 trips).
+
+Reusable functions:
+trips_per_route(trips_df, date)
+top_3_routes(trips_df)
+
+4. Stop Frequency Analysis
+Identify the top 5 bus stops with the most arrivals during peak hours (7-9AM): the stops id are 00019	(5841 arrivals), 02674 (4766 arrivals),
+00133	(4766 arrivals), 02163 (4653 arrivals) and 00132	(4494 arrivals)
+With this information, we can analysis if the amenities are related with this trend or just with the demand. Convert GTFS time strings into seconds for accurate filtering: 
+- this help us to use a number (int, float) instead a string, and use the same unit (seconds)
+
+Reusable functions:
+parse_time_to_seconds(time_str)
+top_stops_peak_hours(stop_times_df)
+
+5. Arrival Time Distribution
+Plot a histogram of arrivals across the entire day: this charts makes evident that there are 2 peaks period of time: at ~30000 seconds after midnight (8:20 am) and ~65000 seconds after midnight (6:05 pm). 
+The second peak looks wider than the first one, so we can deduce that demand is more concentrated in the morning than in the afternoon. With this information we could check if we need to pay attention to the passenger density during the morning and evaluate if we need increase the frequency.
+
+Function: plot_arrival_distribution(stop_times_df)
+
+6. Average Trip Duration per Route
+Estimated average trip duration per route: it was necessary to calculate the trip lenght (considering arrival times), and then estimated the average per route. 
+All generated analysis results are stored in the outputs/ directory.
+For the Trip Duration Analysis, the script exports a text file containing the average trip duration per route.
+The output file name follows this convention: avg_by_route_YYYYMMDD_HHMMSS.txt
+This timestamped naming approach ensures: No files are overwritten, clear traceability of when the analysis was executed, improved reproducibility of results.
+
+7. Unusual Trip Durations
+To identify routes with unusually long or short trip durations, percentile-based thresholds were applied to the average trip duration per route.
+Routes below the 10th percentile were classified as unusually short, while routes above the 90th percentile were classified as unusually long.
+This approach provides a simple and robust way to highlight potential outliers for further operational review.
+
+
+## How to Run the Notebook
+1. Clone the repository
+2. Open `GO-GTFS.ipynb` in Google Colab 
+3. Ensure pandas, numpy, and matplotlib are installed
+4. Run all cells sequentially
+
+
+## Key Insights
+- A small number of routes concentrate the highest number of daily trips
+- Peak-hour arrivals are highly concentrated at specific high-demand stops
+- Some routes exhibit significantly longer or shorter durations, which may indicate
+  operational or scheduling differences
+
+
+## Code Quality & Version Control
+- The code is modularized using reusable functions
+- Clear comments are included to explain non-trivial logic
+
+Author
+Elizabeth Peña
+Industrial Engineer | Data & Business Analyst • Data Analysis • Process Improvement
+
