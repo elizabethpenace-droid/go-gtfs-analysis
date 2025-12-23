@@ -10,15 +10,21 @@ using real-world transit data while following best practices in code structure a
 version control.
 
 ## Data Source
-The data used in this project comes from the official GTFS files provided by
-:contentReference[oaicite:0]{index=0} through the GO Transit
-Software Developers portal.
+The data used in this project comes from the official GTFS files provided by GO Transit
 
-Files used include:
+Files include:
 - trips.txt
 - stop_times.txt
 - stops.txt
 - routes.txt
+- transfers.txt
+- feed_info.txt
+- agency.txt
+- calendar_dates.txt
+- stop_amentities.txt
+- fare_rules.txt
+- fare_attributes.txt
+- shapes.txt
 
 ## Project Structure
 .
@@ -80,9 +86,10 @@ This timestamped naming approach ensures: No files are overwritten, clear tracea
 7. Unusual Trip Durations
 To identify routes with unusually long or short trip durations, percentile-based thresholds were applied to the average trip duration per route.
 Routes below the 10th percentile were classified as unusually short, while routes above the 90th percentile were classified as unusually long.
-This approach provides a simple and robust way to highlight potential outliers for further operational review.
+The amount for each one are 9 routes between 39 and 50 minutes, and 10 routes between 113 and 176 minutes.
+With this information, we could analyze if this difference is due to distance (longer routes vs shorter routes), traffic(multiple routes with the same stops) or if reflects any outliers (close street)
 
-
+ 
 ## How to Run the Notebook
 1. Clone the repository
 2. Open `GO-GTFS.ipynb` in Google Colab 
